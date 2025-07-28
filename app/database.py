@@ -21,6 +21,36 @@ engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+def create_default_admin():
+    """Create default admin user if it doesn't exist"""
+    try:
+        from app.models.user import User
+        from app.services.auth import get_password_hash, get_user
+        
+        db = SessionLocal()
+        
+        # Check if admin user already exists
+        admin_user = get_user(db, "admin")
+        
+        if not admin_user:
+            # Create admin user
+            hashed_password = get_password_hash("admin")
+            admin_user = User(username="admin", hashed_password=hashed_password)
+            
+            db.add(admin_user)
+            db.commit()
+            logger.info("Default admin user created successfully")
+        else:
+            logger.info("Admin user already exists")
+            
+    except Exception as e:
+        logger.error(f"Error creating admin user: {e}")
+        if 'db' in locals():
+            db.rollback()
+    finally:
+        if 'db' in locals():
+            db.close()
+
 def init_db():
     """Initialize database tables safely"""
     try:
@@ -34,6 +64,9 @@ def init_db():
             logger.info("Database tables created successfully")
         else:
             logger.info(f"Database tables already exist: {existing_tables}")
+        
+        # Create default admin user
+        create_default_admin()
             
     except Exception as e:
         logger.error(f"Error initializing database: {e}")

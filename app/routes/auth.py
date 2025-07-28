@@ -16,38 +16,13 @@ def get_db():
 
 
 @router.post("/login", response_model=schemas.Token)
-async def login(request: Request, db: Session = Depends(get_db)):
+async def login(credentials: schemas.LoginRequest, db: Session = Depends(get_db)):
     """
-    Login endpoint that accepts both JSON and form data
+    Login endpoint that accepts JSON credentials
     """
     try:
-        content_type = request.headers.get("content-type", "")
-        
-        if "application/json" in content_type:
-            # Handle JSON request
-            body = await request.json()
-            username = body.get("username")
-            password = body.get("password")
-            
-            if not username or not password:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="Username and password are required"
-                )
-        else:
-            # Handle form data
-            form_data = await request.form()
-            username = form_data.get("username")
-            password = form_data.get("password")
-            
-            if not username or not password:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="Username and password are required"
-                )
-        
         # Authenticate user
-        user = auth_service.authenticate_user(db, username, password)
+        user = auth_service.authenticate_user(db, credentials.username, credentials.password)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, 
@@ -68,13 +43,13 @@ async def login(request: Request, db: Session = Depends(get_db)):
         )
 
 
-@router.post("/login-json", response_model=schemas.Token)
-def login_json(credentials: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.post("/login-form", response_model=schemas.Token)
+async def login_form(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
-    Alternative login endpoint specifically for JSON requests
+    Login endpoint for form data (OAuth2 compatible)
     """
     try:
-        user = auth_service.authenticate_user(db, credentials.username, credentials.password)
+        user = auth_service.authenticate_user(db, form_data.username, form_data.password)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, 
@@ -85,7 +60,7 @@ def login_json(credentials: schemas.UserCreate, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Login JSON error: {str(e)}")
+        logger.error(f"Login form error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error during login"
