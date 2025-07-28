@@ -83,16 +83,8 @@ async def health_check():
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173", 
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5173",
-        "https://hakon-frontend.herokuapp.com",
-        "https://hakon-56ae06ddc8d1.herokuapp.com",
-        "*"  # Allow all origins for development
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=False,  # No credentials needed for JWT auth
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
