@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app import models
+from app.models.user import User
 from app.database import SessionLocal
 import os
 
@@ -35,7 +35,7 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_user(db: Session, username: str) -> Optional[models.User]:
+def get_user(db: Session, username: str) -> Optional[User]:
     return db.query(models.User).filter(models.User.username == username).first()
 
 
