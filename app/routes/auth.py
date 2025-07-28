@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app import models, schemas
+from app.models.user import User
+from app import schemas
 from app.services import auth as auth_service
 
 router = APIRouter()
@@ -22,10 +23,10 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 
 @router.post("/logout")
-def logout(current_user: models.User = Depends(auth_service.get_current_user)):
+def logout(current_user: User = Depends(auth_service.get_current_user)):
     return {"message": "Logout successful"}
 
 
 @router.get("/check-auth", response_model=schemas.User)
-def check_auth(current_user: models.User = Depends(auth_service.get_current_user)):
+def check_auth(current_user: User = Depends(auth_service.get_current_user)):
     return current_user
