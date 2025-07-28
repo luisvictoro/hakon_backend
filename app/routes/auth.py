@@ -11,12 +11,8 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-def get_db():
-    return auth_service.get_db()
-
-
 @router.post("/login", response_model=schemas.Token)
-async def login(credentials: schemas.LoginRequest, db: Session = Depends(get_db)):
+async def login(credentials: schemas.LoginRequest, db: Session = Depends(auth_service.get_db)):
     """
     Login endpoint that accepts JSON credentials
     """
@@ -44,7 +40,7 @@ async def login(credentials: schemas.LoginRequest, db: Session = Depends(get_db)
 
 
 @router.post("/login-form", response_model=schemas.Token)
-async def login_form(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def login_form(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(auth_service.get_db)):
     """
     Login endpoint for form data (OAuth2 compatible)
     """
@@ -68,7 +64,7 @@ async def login_form(form_data: OAuth2PasswordRequestForm = Depends(), db: Sessi
 
 
 @router.post("/register", response_model=schemas.User)
-def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def register(user: schemas.UserCreate, db: Session = Depends(auth_service.get_db)):
     """
     Register a new user
     """
