@@ -36,10 +36,10 @@ def get_password_hash(password: str) -> str:
 
 
 def get_user(db: Session, username: str) -> Optional[User]:
-    return db.query(models.User).filter(models.User.username == username).first()
+    return db.query(User).filter(User.username == username).first()
 
 
-def authenticate_user(db: Session, username: str, password: str) -> Optional[models.User]:
+def authenticate_user(db: Session, username: str, password: str) -> Optional[User]:
     user = get_user(db, username)
     if not user or not verify_password(password, user.hashed_password):
         return None
