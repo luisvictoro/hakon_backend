@@ -3,6 +3,8 @@ from .vulnerability import (
     VulnerabilityBase, VulnerabilityCreate, Vulnerability,
     ScanTemplateBase, ScanTemplateCreate, ScanTemplate,
     VulnerabilityStatusHistoryBase, VulnerabilityStatusHistoryCreate, VulnerabilityStatusHistory,
+    ManualChangeBase, ManualChangeCreate, ManualChangeResponse,
+    VulnerabilityManualChangeHistoryBase, VulnerabilityManualChangeHistoryCreate, VulnerabilityManualChangeHistory,
     DashboardStats, StatusCount, SeverityCount, MonthCount, VulnerabilitySummary, ActivityItem,
     ExpectedField, ExpectedFieldsResponse
 )
@@ -23,6 +25,12 @@ __all__ = [
     "VulnerabilityStatusHistoryBase",
     "VulnerabilityStatusHistoryCreate",
     "VulnerabilityStatusHistory",
+    "ManualChangeBase",
+    "ManualChangeCreate",
+    "ManualChangeResponse",
+    "VulnerabilityManualChangeHistoryBase",
+    "VulnerabilityManualChangeHistoryCreate",
+    "VulnerabilityManualChangeHistory",
     "DashboardStats",
     "StatusCount",
     "SeverityCount",

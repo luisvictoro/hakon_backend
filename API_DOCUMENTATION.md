@@ -276,6 +276,141 @@ Authorization: Bearer <token>
 
 ---
 
+## 🔧 Alterações Manuais
+
+### Alterar Severidade
+```http
+PUT /api/vulnerability/{vulnerability_id}/severity
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "field_changed": "severity",
+  "new_value": "Critical",
+  "reason": "Vulnerabilidade identificada como crítica após análise manual"
+}
+```
+
+**Resposta:**
+```json
+{
+  "message": "Severity updated successfully",
+  "vulnerability": {
+    "id": 1,
+    "ip": "192.168.1.1",
+    "severity": "Critical",
+    "original_severity": "High",
+    "severity_manually_changed": true,
+    "status": "new",
+    "original_status": "new",
+    "status_manually_changed": false
+  },
+  "change": {
+    "field_changed": "severity",
+    "old_value": "High",
+    "new_value": "Critical",
+    "changed_by": "admin",
+    "manually_changed": true
+  }
+}
+```
+
+### Alterar Status
+```http
+PUT /api/vulnerability/{vulnerability_id}/status
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "field_changed": "status",
+  "new_value": "closed",
+  "reason": "Vulnerabilidade corrigida e validada"
+}
+```
+
+**Resposta:**
+```json
+{
+  "message": "Status updated successfully",
+  "vulnerability": {
+    "id": 1,
+    "ip": "192.168.1.1",
+    "severity": "High",
+    "original_severity": "High",
+    "severity_manually_changed": false,
+    "status": "closed",
+    "original_status": "new",
+    "status_manually_changed": true
+  },
+  "change": {
+    "field_changed": "status",
+    "old_value": "new",
+    "new_value": "closed",
+    "changed_by": "admin",
+    "manually_changed": true
+  }
+}
+```
+
+### Histórico de Alterações Manuais
+```http
+GET /api/vulnerability/{vulnerability_id}/manual-changes
+Authorization: Bearer <token>
+```
+
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "vulnerability_id": 1,
+    "vuln_hash": "abc123...",
+    "field_changed": "severity",
+    "old_value": "High",
+    "new_value": "Critical",
+    "changed_by": "admin",
+    "changed_at": "2025-01-15T10:30:00Z",
+    "reason": "Vulnerabilidade identificada como crítica após análise manual"
+  },
+  {
+    "id": 2,
+    "vulnerability_id": 1,
+    "vuln_hash": "abc123...",
+    "field_changed": "status",
+    "old_value": "new",
+    "new_value": "closed",
+    "changed_by": "admin",
+    "changed_at": "2025-01-15T11:00:00Z",
+    "reason": "Vulnerabilidade corrigida e validada"
+  }
+]
+```
+
+### Todas as Alterações Manuais
+```http
+GET /api/vulnerability/manual-changes/all?skip=0&limit=100
+Authorization: Bearer <token>
+```
+
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "vulnerability_id": 1,
+    "vuln_hash": "abc123...",
+    "field_changed": "severity",
+    "old_value": "High",
+    "new_value": "Critical",
+    "changed_by": "admin",
+    "changed_at": "2025-01-15T10:30:00Z",
+    "reason": "Vulnerabilidade identificada como crítica após análise manual"
+  }
+]
+```
+
+---
+
 ## 🗄️ Estrutura de Dados
 
 ### Vulnerability
@@ -440,5 +575,9 @@ const history = await fetch(`/api/vulnerability/history/${vulnHash}`, {
 | GET | `/api/vulnerability/list` | Listar com paginação |
 | GET | `/api/vulnerability/expected-fields` | Obter campos esperados |
 | GET | `/api/vulnerability/history/{hash}` | Histórico de vulnerabilidade |
+| PUT | `/api/vulnerability/{id}/severity` | Alterar severidade manualmente |
+| PUT | `/api/vulnerability/{id}/status` | Alterar status manualmente |
+| GET | `/api/vulnerability/{id}/manual-changes` | Histórico de alterações manuais |
+| GET | `/api/vulnerability/manual-changes/all` | Todas as alterações manuais |
 | DELETE | `/api/vulnerability/uploads/{month}` | Deletar por mês |
 | DELETE | `/api/vulnerability/uploads/all` | Deletar tudo | 
