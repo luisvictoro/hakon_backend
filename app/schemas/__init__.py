@@ -4,7 +4,8 @@ from .vulnerability import (
     ScanTemplateBase, ScanTemplateCreate, ScanTemplate,
     VulnerabilityStatusHistoryBase, VulnerabilityStatusHistoryCreate, VulnerabilityStatusHistory,
     DashboardStats, StatusCount, SeverityCount, MonthCount, VulnerabilitySummary, ActivityItem,
-    ExpectedField, ExpectedFieldsResponse
+    ExpectedField, ExpectedFieldsResponse,
+    UpdateSeverityRequest, UpdateStatusRequest, VulnerabilityChangeHistory
 )
 
 __all__ = [
@@ -30,5 +31,8 @@ __all__ = [
     "VulnerabilitySummary",
     "ActivityItem",
     "ExpectedField",
-    "ExpectedFieldsResponse"
+    "ExpectedFieldsResponse",
+    "UpdateSeverityRequest",
+    "UpdateStatusRequest",
+    "VulnerabilityChangeHistory"
 ]
