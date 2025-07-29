@@ -121,6 +121,20 @@ def migrate_vulnerability_status_history_table():
     else:
         print("✅ Tabela vulnerability_status_history já existe")
 
+def migrate_vulnerability_change_history_table():
+    """Cria a tabela vulnerability_change_history"""
+    print("\n🔧 Migrando tabela vulnerability_change_history...")
+
+    if not check_table_exists(engine, 'vulnerability_change_history'):
+        print("➕ Criando tabela vulnerability_change_history...")
+        try:
+            Base.metadata.create_all(bind=engine, tables=[vulnerability.VulnerabilityChangeHistory.__table__])
+            print("✅ Tabela vulnerability_change_history criada")
+        except Exception as e:
+            print(f"❌ Erro ao criar tabela vulnerability_change_history: {e}")
+    else:
+        print("✅ Tabela vulnerability_change_history já existe")
+
 def update_existing_vulnerabilities():
     """Atualiza vulnerabilidades existentes com hash e status"""
     print("\n🔄 Atualizando vulnerabilidades existentes...")
@@ -196,6 +210,7 @@ def main():
     migrate_vulnerabilities_table()
     migrate_scan_templates_table()
     migrate_vulnerability_status_history_table()
+    migrate_vulnerability_change_history_table()
     update_existing_vulnerabilities()
     
     print("\n🎉 Migração concluída com sucesso!")
@@ -204,6 +219,7 @@ def main():
     print("- ✅ Campo status adicionado à tabela vulnerabilities")
     print("- ✅ Tabela scan_templates criada")
     print("- ✅ Tabela vulnerability_status_history criada")
+    print("- ✅ Tabela vulnerability_change_history criada")
     print("- ✅ Vulnerabilidades existentes atualizadas")
 
 if __name__ == "__main__":

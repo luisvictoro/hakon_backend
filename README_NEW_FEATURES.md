@@ -41,7 +41,21 @@ CREATE TABLE vulnerability_status_history (
 );
 ```
 
-### 3. `vulnerabilities` (Atualizada)
+### 3. `vulnerability_change_history`
+Armazena alterações manuais de status e severidade.
+
+```sql
+CREATE TABLE vulnerability_change_history (
+    id SERIAL PRIMARY KEY,
+    vulnerability_id INTEGER NOT NULL,
+    field VARCHAR(20) NOT NULL,
+    old_value VARCHAR(50) NOT NULL,
+    new_value VARCHAR(50) NOT NULL,
+    changed_by VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+### 4. `vulnerabilities` (Atualizada)
 Adicionados campos `vuln_hash` e `status`.
 
 ```sql
@@ -129,6 +143,9 @@ Form Data:
 ### Vulnerabilidades (Atualizadas)
 - `POST /api/vulnerability/upload` - Upload com template_id
 - `GET /api/vulnerability/history/{hash}` - Histórico de vulnerabilidade
+- `PUT /api/vulnerability/{id}/severity` - Alterar severidade
+- `PUT /api/vulnerability/{id}/status` - Alterar status
+- `GET /api/vulnerability/changes/{id}` - Histórico de alterações
 
 ---
 
