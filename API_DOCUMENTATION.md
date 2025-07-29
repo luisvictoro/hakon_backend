@@ -163,6 +163,79 @@ Authorization: Bearer <token>
 ]
 ```
 
+### Obter Campos Esperados
+```http
+GET /api/vulnerability/expected-fields
+Authorization: Bearer <token>
+```
+
+**Resposta:**
+```json
+{
+  "required_fields": [
+    {
+      "name": "ip",
+      "required": true,
+      "description": "Endereço IP do host vulnerável",
+      "example": "192.168.1.1",
+      "data_type": "string"
+    },
+    {
+      "name": "nvt_name",
+      "required": true,
+      "description": "Nome da vulnerabilidade/NVT",
+      "example": "SQL Injection",
+      "data_type": "string"
+    },
+    {
+      "name": "severity",
+      "required": true,
+      "description": "Nível de severidade da vulnerabilidade",
+      "example": "High",
+      "data_type": "string"
+    }
+  ],
+  "optional_fields": [
+    {
+      "name": "hostname",
+      "required": false,
+      "description": "Nome do host vulnerável",
+      "example": "server01.example.com",
+      "data_type": "string"
+    },
+    {
+      "name": "cvss",
+      "required": false,
+      "description": "Score CVSS da vulnerabilidade",
+      "example": "8.5",
+      "data_type": "float"
+    },
+    {
+      "name": "cves",
+      "required": false,
+      "description": "Lista de CVEs separados por vírgula",
+      "example": "CVE-2021-1234,CVE-2021-5678",
+      "data_type": "string"
+    }
+  ],
+  "severity_levels": [
+    "Critical",
+    "High",
+    "Medium",
+    "Low",
+    "Info"
+  ],
+  "example_mapping": {
+    "Host": "ip",
+    "Name": "nvt_name",
+    "Risk": "severity",
+    "CVSS": "cvss",
+    "CVE": "cves",
+    "Hostname": "hostname"
+  }
+}
+```
+
 ### Histórico de Vulnerabilidade
 ```http
 GET /api/vulnerability/history/{vuln_hash}
@@ -365,6 +438,7 @@ const history = await fetch(`/api/vulnerability/history/${vulnHash}`, {
 | GET | `/api/vulnerability/months` | Listar meses |
 | GET | `/api/vulnerability/uploads` | Listar todas vulnerabilidades |
 | GET | `/api/vulnerability/list` | Listar com paginação |
+| GET | `/api/vulnerability/expected-fields` | Obter campos esperados |
 | GET | `/api/vulnerability/history/{hash}` | Histórico de vulnerabilidade |
 | DELETE | `/api/vulnerability/uploads/{month}` | Deletar por mês |
 | DELETE | `/api/vulnerability/uploads/all` | Deletar tudo | 
