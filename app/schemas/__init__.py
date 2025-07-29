@@ -1,5 +1,9 @@
 from .auth import Token, TokenData, UserBase, UserCreate, User, LoginRequest
-from .vulnerability import VulnerabilityBase, VulnerabilityCreate, Vulnerability
+from .vulnerability import (
+    VulnerabilityBase, VulnerabilityCreate, Vulnerability,
+    ScanTemplateBase, ScanTemplateCreate, ScanTemplate,
+    VulnerabilityStatusHistoryBase, VulnerabilityStatusHistoryCreate, VulnerabilityStatusHistory
+)
 
 __all__ = [
     "Token",
@@ -10,5 +14,11 @@ __all__ = [
     "LoginRequest",
     "VulnerabilityBase",
     "VulnerabilityCreate", 
-    "Vulnerability"
+    "Vulnerability",
+    "ScanTemplateBase",
+    "ScanTemplateCreate",
+    "ScanTemplate",
+    "VulnerabilityStatusHistoryBase",
+    "VulnerabilityStatusHistoryCreate",
+    "VulnerabilityStatusHistory"
 ]

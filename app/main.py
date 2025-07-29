@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
 from app.database import init_db
-from app.routes import auth, vulnerability
+from app.routes import auth, vulnerability, template
 import logging
 import os
 
@@ -63,7 +64,7 @@ async def health_check():
         # Check database connection
         from app.database import engine
         with engine.connect() as conn:
-            conn.execute("SELECT 1")
+            conn.execute(text("SELECT 1"))
         
         return {
             "status": "healthy",
@@ -101,6 +102,7 @@ async def log_requests(request: Request, call_next):
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(vulnerability.router, prefix="/api/vulnerability", tags=["vulnerability"])
+app.include_router(template.router, prefix="/api/templates", tags=["templates"])
 
 if __name__ == "__main__":
     import uvicorn
