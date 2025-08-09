@@ -3,7 +3,7 @@
     {
       "name": "ip",
       "required": true,
-      "description": "Endereço IP do host vulnerável",
+      "description": "Endereço IP do host vulnerável (máximo 45 caracteres)",
       "example": "192.168.1.1",
       "data_type": "string"
     },
@@ -17,7 +17,7 @@
     {
       "name": "severity",
       "required": true,
-      "description": "Nível de severidade da vulnerabilidade",
+      "description": "Nível de severidade da vulnerabilidade (máximo 20 caracteres)",
       "example": "High",
       "data_type": "string"
     }
@@ -26,7 +26,7 @@
     {
       "name": "hostname",
       "required": false,
-      "description": "Nome do host vulnerável",
+      "description": "Nome do host vulnerável (máximo 255 caracteres)",
       "example": "server01.example.com",
       "data_type": "string"
     },
@@ -54,10 +54,20 @@
   ],
   "example_mapping": {
     "Host": "ip",
+    "IP": "ip",
+    "IP Address": "ip",
     "Name": "nvt_name",
+    "Vulnerability": "nvt_name",
+    "Title": "nvt_name",
     "Risk": "severity",
+    "Severity": "severity",
+    "Level": "severity",
     "CVSS": "cvss",
+    "Score": "cvss",
     "CVE": "cves",
-    "Hostname": "hostname"
+    "CVEs": "cves",
+    "Hostname": "hostname",
+    "Server": "hostname",
+    "Domain": "hostname"
   }
 }

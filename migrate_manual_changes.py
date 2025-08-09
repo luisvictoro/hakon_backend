@@ -54,6 +54,29 @@ def migrate_vulnerability_table():
         if 'status_manually_changed' not in existing_columns:
             logger.info("Adicionando campo status_manually_changed...")
             db.execute(text("ALTER TABLE vulnerabilities ADD COLUMN status_manually_changed BOOLEAN DEFAULT FALSE"))
+
+        # Adiciona colunas base de parse solicitadas, se não existirem
+        parse_columns = [
+            ("port", "INTEGER"),
+            ("summary", "TEXT"),
+            ("impact", "TEXT"),
+            ("solution", "TEXT"),
+            ("affects", "TEXT"),
+            ("parameter", "VARCHAR(255)"),
+            ("request", "TEXT"),
+            ("raw_text_details", "TEXT")
+        ]
+        # Coleta todas as colunas existentes
+        result_all = db.execute(text("""
+            SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_name = 'vulnerabilities'
+        """))
+        existing_all = {row[0] for row in result_all.fetchall()}
+        for column_name, column_type in parse_columns:
+            if column_name not in existing_all:
+                logger.info(f"Adicionando coluna {column_name}...")
+                db.execute(text(f"ALTER TABLE vulnerabilities ADD COLUMN {column_name} {column_type}"))
         
         # Atualiza registros existentes
         logger.info("Atualizando registros existentes...")

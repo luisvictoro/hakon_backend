@@ -82,6 +82,32 @@ def migrate_vulnerabilities_table():
         else:
             print("✅ Campo status já existe")
         
+        # Novos campos solicitados para base de parse (não remove existentes)
+        new_columns_sql = [
+            ("port", "INTEGER"),
+            ("summary", "TEXT"),
+            ("impact", "TEXT"),
+            ("solution", "TEXT"),
+            ("affects", "TEXT"),
+            ("parameter", "VARCHAR(255)"),
+            ("request", "TEXT"),
+            ("raw_text_details", "TEXT")
+        ]
+        for column_name, column_type in new_columns_sql:
+            if not check_column_exists(engine, 'vulnerabilities', column_name):
+                print(f"➕ Adicionando coluna {column_name}...")
+                try:
+                    conn.execute(text(f"""
+                        ALTER TABLE vulnerabilities 
+                        ADD COLUMN {column_name} {column_type};
+                    """))
+                    conn.commit()
+                    print(f"✅ Coluna {column_name} adicionada")
+                except ProgrammingError as e:
+                    print(f"⚠️ Erro ao adicionar {column_name}: {e}")
+            else:
+                print(f"✅ Coluna {column_name} já existe")
+
         # Adiciona índices se não existirem
         try:
             conn.execute(text("""
